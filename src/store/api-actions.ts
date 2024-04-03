@@ -1,17 +1,14 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const/const';
+import { APIRoute, TIMEOUT_SHOW_ERROR } from '../const/const';
 import {
   loadNearPlaces,
   loadOffers,
   loadReviews,
-  requireAuthorization,
   setActiveOffer,
   setError,
   setOffersDataLoadingStatus,
   setOfferNotExist,
-  addUserData,
-  removeUserData,
   addReview,
 } from './action';
 import { OfferTypes } from '../types/offer';
@@ -21,6 +18,7 @@ import { AuthData } from '../types/auth-data';
 import { UserData, UserDataForState } from '../types/user-data';
 import { store } from '.';
 import { ReviewTypes, CommentTypes } from '../types/review';
+import { addUserData, removeUserData } from './user-process/user-process';
 
 export const clearErrorAction = createAsyncThunk(
   'data/clearError',
@@ -95,17 +93,12 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    try {
-      await api.get(APIRoute.Login);
-      dispatch(requireAuthorization(AuthorizationStatus.Auth));
-      const storedUserData: string | null = localStorage.getItem('userData') || '';
-      if (storedUserData !== null) {
-        const userData: UserDataForState = JSON.parse(storedUserData) as UserDataForState;
-        const { name, avatarUrl, isPro } = userData;
-        dispatch(addUserData({ name, avatarUrl, isPro }));
-      }
-    } catch {
-      dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    await api.get(APIRoute.Login);
+    const storedUserData: string | null = localStorage.getItem('userData') || '';
+    if (storedUserData !== null) {
+      const userData: UserDataForState = JSON.parse(storedUserData) as UserDataForState;
+      const { name, email, avatarUrl, isPro } = userData;
+      dispatch(addUserData({ name, email, avatarUrl, isPro }));
     }
   },
 );
@@ -119,9 +112,8 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   async ({ login: email, password }, { dispatch, extra: api }) => {
     const { data: { token, name, avatarUrl, isPro } } = await api.post<UserData>(APIRoute.Login, { email, password });
     saveToken(token);
-    localStorage.setItem('userData', JSON.stringify({ name, avatarUrl, isPro }));
-    dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    dispatch(addUserData({ name, avatarUrl, isPro }));
+    localStorage.setItem('userData', JSON.stringify({ name, email, avatarUrl, isPro }));
+    dispatch(addUserData({ name, email, avatarUrl, isPro }));
   },
 );
 
@@ -135,7 +127,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(removeUserData());
-    dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+    localStorage.removeItem('userData');
   },
 );
 
@@ -146,7 +138,7 @@ export const sendReview = createAsyncThunk<void, { reviewData: CommentTypes; off
 }>(
   'reviews/sendReview',
   async ({ reviewData, offerId }, { dispatch, extra: api }) => {
-    const {data} = await api.post<ReviewTypes>(`${APIRoute.Comments}/${offerId}`, reviewData);
+    const { data } = await api.post<ReviewTypes>(`${APIRoute.Comments}/${offerId}`, reviewData);
     dispatch(addReview(data));
   },
 );

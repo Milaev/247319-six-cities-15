@@ -48,6 +48,7 @@ export default function Layout() {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const favoritesOffers = offers.filter((offer) => offer.isFavorite);
   const favoritesEmptyPage = favoritesOffers.length === 0;
+  const userEmail = useAppSelector((state) => state.userData?.email);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
@@ -81,7 +82,7 @@ export default function Layout() {
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                       {authorizationStatus === AuthorizationStatus.Auth ? (
                         <>
-                          <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                          <span className="header__user-name user__name">{userEmail}</span>
                           <span className="header__favorite-count">{favoritesOffers.length}</span>
                         </>
                       ) : <span className="header__login">Sign in</span>}
