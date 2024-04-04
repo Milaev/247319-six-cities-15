@@ -12,15 +12,23 @@ import {AppRoute, AuthorizationStatus} from '../../const/const';
 import {HelmetProvider} from 'react-helmet-async';
 import {useAppSelector} from '../../hooks/store';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {checkOffersLoadingStatus} from '../../store/app-data/selectors';
+import {checkOffersLoadingStatus, getErrorStatus} from '../../store/app-data/selectors';
+import ErrorScreen from '../error-screen/error-screen';
 
 export default function App(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isOffersDataLoading = useAppSelector(checkOffersLoadingStatus);
+  const hasError = useAppSelector(getErrorStatus);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
     return (
       <LoadingScreen />
+    );
+  }
+
+  if (hasError) {
+    return (
+      <ErrorScreen />
     );
   }
 
