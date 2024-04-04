@@ -29,5 +29,14 @@ export type SelectedOfferData = {
   selectedOffer: OfferTypes | null;
   nearPlaces: OfferTypes[];
   reviews: ReviewTypes[];
+  reviewsIsLoading: boolean;
   isOfferExist: boolean;
+}
+
+export type FavoritesProcess = {
+  favorites: OfferTypes[];
+  favoritesIsLoading: boolean;
+  favoritesPageError: boolean;
+  addFavoriteIsLoading: boolean;
+  addFavoriteError: boolean;
 }

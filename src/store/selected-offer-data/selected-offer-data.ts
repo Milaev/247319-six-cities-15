@@ -9,6 +9,7 @@ const initialState: SelectedOfferData = {
   isOfferExist: false,
   nearPlaces: [],
   reviews: [],
+  reviewsIsLoading: false,
 };
 
 export const selectedOfferData = createSlice({
@@ -33,7 +34,11 @@ export const selectedOfferData = createSlice({
       .addCase(fetchNearPlaces.fulfilled, (state, action) => {
         state.nearPlaces = action.payload;
       })
+      .addCase(fetchReviews.pending, (state) => {
+        state.reviewsIsLoading = true;
+      })
       .addCase(fetchReviews.fulfilled, (state, action) => {
+        state.reviewsIsLoading = false;
         state.reviews = action.payload;
       });
   }

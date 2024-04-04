@@ -7,3 +7,4 @@ export const getSelectedOffer = (state: State): OfferTypes | null => state[NameS
 export const getNearPlaces = (state: State): OfferTypes[] => state[NameSpace.SelectedOfferData].nearPlaces;
 export const checkExistence = (state: State): boolean => state[NameSpace.SelectedOfferData].isOfferExist;
 export const getReviews = (state: State): ReviewTypes[] => state[NameSpace.SelectedOfferData].reviews;
+export const checkReviewsIsLoading = (state: State): boolean => state[NameSpace.SelectedOfferData].reviewsIsLoading;
