@@ -11,4 +11,5 @@ export type UserDataForState = {
   name: string;
   avatarUrl: string;
   isPro: boolean;
-}
+  email: string;
+};

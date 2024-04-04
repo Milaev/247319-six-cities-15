@@ -1,18 +1,20 @@
-import {useState} from 'react';
 import NavTab from '../../components/nav-tab/nav-tab';
 import Map from '../../components/map/map';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import {Helmet} from 'react-helmet-async';
-import {CITIES, getCityData} from '../../const/city';
 import NoPlacesToStay from '../../components/no-places-to-stay/no-places-to-stay';
+import {useState} from 'react';
+import {Helmet} from 'react-helmet-async';
 import {useAppDispatch, useAppSelector} from '../../hooks/store';
-import {changeLocation} from '../../store/action';
+import {CITIES, getCityData} from '../../const/city';
+import {changeLocation} from '../../store/location-process/location-process';
+import {getCurrentLocation} from '../../store/location-process/selectors';
+import {getOffers} from '../../store/app-data/selectors';
 
 export default function MainPage(): JSX.Element {
   const [activePlaceCard, setActivePlaceCard] = useState<string | null>(null);
 
-  const offers = useAppSelector((state) => state.offers);
-  const currentLocation = useAppSelector((state) => state.city);
+  const offers = useAppSelector(getOffers);
+  const currentLocation = useAppSelector(getCurrentLocation);
   const dispatch = useAppDispatch();
 
   const currentOffers = offers.filter((offer) => offer.city.name === currentLocation);

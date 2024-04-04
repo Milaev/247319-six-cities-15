@@ -29,6 +29,13 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
+export enum NameSpace {
+  Location = 'LOCATION',
+  AppData = 'APP_DATA',
+  SelectedOfferData = 'SELECTED_OFFER_DATA',
+  User = 'USER',
+}
+
 function humanizeDateTime(date?: string): string {
   return date ? dayjs(date).format(DATE_FORMAT_IN_REVIEW.toUpperCase()) : '';
 }

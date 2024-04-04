@@ -1,8 +1,8 @@
-import { useState, ChangeEvent, Fragment, FormEvent } from 'react';
-import { useAppDispatch } from '../../../hooks/store';
-import { sendReview } from '../../../store/api-actions';
-import { useParams } from 'react-router-dom';
-import { CommentTypes } from '../../../types/review';
+import {useState, ChangeEvent, Fragment, FormEvent} from 'react';
+import {useAppDispatch} from '../../../hooks/store';
+import {useParams} from 'react-router-dom';
+import {sendReview} from '../../../store/api-actions';
+import {CommentTypes} from '../../../types/review';
 
 const rating = [
   { value: 5, label: 'perfect' },

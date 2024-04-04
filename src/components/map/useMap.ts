@@ -1,5 +1,5 @@
-import {useState, useRef, useEffect, MutableRefObject} from 'react';
 import leaflet from 'leaflet';
+import {useState, useRef, useEffect, MutableRefObject} from 'react';
 import {CityTypes} from '../../types/city';
 
 export default function useMap(
