@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
 import ErrorMessage from './components/error-message/error-message';
@@ -14,8 +14,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <Provider store={store}>
-    <ErrorMessage />
-    <App />
-  </Provider>
+  <React.StrictMode>
+    <Provider store={store}>
+      <ErrorMessage />
+      <App />
+    </Provider>
+  </React.StrictMode>
 );

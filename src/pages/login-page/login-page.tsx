@@ -1,10 +1,11 @@
 import LoginForm from '../../components/login-form/login-form';
 import {Helmet} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
-import { useAppSelector } from '../../hooks/store';
+import {useAppSelector} from '../../hooks/store';
+import {getCurrentLocation} from '../../store/location-process/selectors';
 
 export default function LoginPage(): JSX.Element {
-  const city = useAppSelector((state) => state.city);
+  const city = useAppSelector(getCurrentLocation);
 
   return (
     <main className="page__main page__main--login">

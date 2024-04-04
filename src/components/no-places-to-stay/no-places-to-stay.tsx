@@ -1,7 +1,7 @@
 type NoPlacesToStayProps = {
   city: string;
 }
-export default function NoPlacesToStay({ city }: NoPlacesToStayProps): JSX.Element {
+export default function NoPlacesToStay({city}: NoPlacesToStayProps): JSX.Element {
   return (
     <>
       <section className="cities__no-places">

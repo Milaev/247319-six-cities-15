@@ -30,7 +30,9 @@ export enum AuthorizationStatus {
 }
 
 export enum NameSpace {
-  Data = 'DATA',
+  Location = 'LOCATION',
+  AppData = 'APP_DATA',
+  SelectedOfferData = 'SELECTED_OFFER_DATA',
   User = 'USER',
 }
 

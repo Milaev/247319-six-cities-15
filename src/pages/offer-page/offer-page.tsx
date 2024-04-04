@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
 import Gallery from '../../components/offer/gallery/gallery';
 import OfferMainInfo from '../../components/offer/main-info/offer-main-info';
 import InsideOptions from '../../components/offer/inside-options/inside-options';
 import Host from '../../components/offer/host/host';
 import Map from '../../components/map/map';
-import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
 import ReviewsList from '../../components/offer/review-list/review-list';
-import NotFoundPage from '../not-found-page/not-found-page';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import { useAppSelector } from '../../hooks/store';
-import { fetchOffer, fetchNearPlaces, fetchReviews } from '../../store/api-actions';
-import { OfferTypes } from '../../types/offer';
-import { store } from '../../store';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
+import NotFoundPage from '../not-found-page/not-found-page';
+import {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {Helmet} from 'react-helmet-async';
+import {useAppSelector} from '../../hooks/store';
+import {fetchOffer, fetchNearPlaces, fetchReviews} from '../../store/api-actions';
+import {store} from '../../store';
+import {checkExistence, getNearPlaces, getSelectedOffer} from '../../store/selected-offer-data/selectors';
+import {OfferTypes} from '../../types/offer';
 
 export default function OfferPage(): JSX.Element {
   const params = useParams();
@@ -25,9 +26,9 @@ export default function OfferPage(): JSX.Element {
     store.dispatch(fetchReviews(offerId));
   }, [offerId]);
 
-  const selectedOffer = useAppSelector((state) => state.activeOffer);
-  const nearPlaces = useAppSelector((state) => state.nearPlaces).slice(0, 3);
-  const isOfferNotExist = useAppSelector((state) => state.isOfferExist);
+  const selectedOffer = useAppSelector(getSelectedOffer);
+  const nearPlaces = useAppSelector(getNearPlaces).slice(0, 3);
+  const isOfferNotExist = useAppSelector(checkExistence);
   const placesForMap: OfferTypes[] = selectedOffer ? [...nearPlaces, selectedOffer] : [];
 
   const [activePlaceCard, setActivePlaceCard] = useState<string | null>(offerId);

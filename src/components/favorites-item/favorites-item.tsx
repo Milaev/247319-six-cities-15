@@ -1,13 +1,13 @@
 import {OfferTypes} from '../../types/offer';
-import { Link } from 'react-router-dom';
-import { convertToPercentage, capitalizeFirstLetter } from '../../const/const';
+import {Link} from 'react-router-dom';
+import {convertToPercentage, capitalizeFirstLetter} from '../../const/const';
 
 type FavoritesItemProps = {
   favoriteOffer: OfferTypes;
 }
 
 export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.Element {
-  const { id, title, type, price, previewImage, rating, isPremium, isFavorite } = favoriteOffer;
+  const {id, title, type, price, previewImage, rating, isPremium, isFavorite} = favoriteOffer;
 
   return (
     <article className="favorites__card place-card">

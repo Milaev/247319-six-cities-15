@@ -1,11 +1,13 @@
-import {AuthorizationStatus} from '../../../const/const';
 import Reviews from '../reviews/reviews';
 import ReviewsForm from '../../../components/offer/reviews-form/reviews-form';
+import {AuthorizationStatus} from '../../../const/const';
 import {useAppSelector} from '../../../hooks/store';
+import {getAuthorizationStatus} from '../../../store/user-process/selectors';
+import {getReviews} from '../../../store/selected-offer-data/selectors';
 
 export default function ReviewsList(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const reviews = useAppSelector((state) => state.reviews);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const reviews = useAppSelector(getReviews);
   const reviewsLength = reviews.length;
 
   return(

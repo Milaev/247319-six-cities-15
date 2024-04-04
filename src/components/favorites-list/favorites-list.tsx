@@ -1,5 +1,5 @@
-import {OfferTypes} from '../../types/offer';
 import FavoritesItem from '../favorites-item/favorites-item';
+import {OfferTypes} from '../../types/offer';
 import {Link} from 'react-router-dom';
 
 type FavoritesListProps = {
