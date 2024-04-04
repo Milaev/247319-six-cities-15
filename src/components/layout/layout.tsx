@@ -1,10 +1,10 @@
 import Logo from '../logo/logo';
 import {Outlet, Link, useLocation} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, NameSpace} from '../../const/const';
+import {AppRoute, AuthorizationStatus} from '../../const/const';
 import {useAppDispatch, useAppSelector} from '../../hooks/store';
 import {logoutAction} from '../../store/api-actions';
 import {getOffers} from '../../store/app-data/selectors';
-import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getAuthorizationStatus, getUserData} from '../../store/user-process/selectors';
 
 type LayoutConfig = {
   rootClassName: string;
@@ -50,7 +50,7 @@ export default function Layout() {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const favoritesOffers = offers.filter((offer) => offer.isFavorite);
   const favoritesEmptyPage = favoritesOffers.length === 0;
-  const userEmail = useAppSelector((state) => state[NameSpace.User].userData?.email);
+  const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
@@ -84,7 +84,7 @@ export default function Layout() {
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                       {authorizationStatus === AuthorizationStatus.Auth ? (
                         <>
-                          <span className="header__user-name user__name">{userEmail}</span>
+                          <span className="header__user-name user__name">{userData?.email}</span>
                           <span className="header__favorite-count">{favoritesOffers.length}</span>
                         </>
                       ) : <span className="header__login">Sign in</span>}

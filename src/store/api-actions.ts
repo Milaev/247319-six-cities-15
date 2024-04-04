@@ -1,4 +1,3 @@
-import {store} from './index';
 import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRoute, TIMEOUT_SHOW_ERROR} from '../const/const';
@@ -8,14 +7,18 @@ import {addReview} from './selected-offer-data/selected-offer-data';
 import {AppDispatch, State} from '../types/state';
 import {OfferTypes} from '../types/offer';
 import {AuthData} from '../types/auth-data';
-import {UserData, UserDataForState} from '../types/user-data';
+import {UserData} from '../types/user-data';
 import {ReviewTypes, CommentTypes} from '../types/review';
 
-export const clearErrorAction = createAsyncThunk(
+export const clearErrorAction = createAsyncThunk<void, void, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
   'data/clearError',
-  () => {
+  (_arg, {dispatch}) => {
     setTimeout(
-      () => store.dispatch(setError(null)),
+      () => dispatch(setError(null)),
       TIMEOUT_SHOW_ERROR,
     );
   },
@@ -77,14 +80,9 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, {dispatch, extra: api}) => {
-    await api.get(APIRoute.Login);
-    const storedUserData: string | null = localStorage.getItem('userData') || '';
-    if (storedUserData !== null) {
-      const userData: UserDataForState = JSON.parse(storedUserData) as UserDataForState;
-      const { name, email, avatarUrl, isPro } = userData;
-      dispatch(addUserData({ name, email, avatarUrl, isPro }));
-    }
-  },
+    const {data: {name, email, avatarUrl, isPro}} = await api.get<UserData>(APIRoute.Login);
+    dispatch(addUserData({name, email, avatarUrl, isPro}));
+  }
 );
 
 export const loginAction = createAsyncThunk<void, AuthData, {
@@ -96,7 +94,6 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   async ({login: email, password}, {dispatch, extra: api}) => {
     const {data: { token, name, avatarUrl, isPro} } = await api.post<UserData>(APIRoute.Login, { email, password });
     saveToken(token);
-    localStorage.setItem('userData', JSON.stringify({name, email, avatarUrl, isPro}));
     dispatch(addUserData({name, email, avatarUrl, isPro}));
   },
 );
@@ -111,7 +108,6 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(removeUserData());
-    localStorage.removeItem('userData');
   },
 );
 
