@@ -1,5 +1,12 @@
-import {OfferTypes} from '../../../types/offer';
+import BookmarkButton from '../../bookmark-button/bookmark-button';
 import {convertToPercentage, capitalizeFirstLetter} from '../../../const/const';
+import {useAppSelector, useAppDispatch} from '../../../hooks/store';
+import {getAuthorizationStatus} from '../../../store/user-process/selectors';
+import {useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import {AuthorizationStatus, AppRoute} from '../../../const/const';
+import {addFavorites} from '../../../store/api-actions';
+import {OfferTypes} from '../../../types/offer';
 
 type OfferMainInfoProps = {
   selectedOffer: OfferTypes;
@@ -7,6 +14,20 @@ type OfferMainInfoProps = {
 
 export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.Element {
   const {isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price} = selectedOffer;
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const navigate = useNavigate();
+  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
+  const dispatch = useAppDispatch();
+
+  const favoritesToggle = () => {
+    if (authStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    setFavoriteStatus(!favoriteStatus);
+    dispatch(addFavorites({ offerData: selectedOffer, id: selectedOffer.id, isFavorite: !favoriteStatus}));
+  };
+
   return (
     <>
       {isPremium ?
@@ -17,15 +38,11 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
         <h1 className="offer__name">
           {title}
         </h1>
-        <button
-          className={`offer__bookmark-button button ${isFavorite ? 'offer__bookmark-button--active' : ''}`}
-          type="button"
-        >
-          <svg className="offer__bookmark-icon" width={31} height={33}>
-            <use xlinkHref="#icon-bookmark" />
-          </svg>
-          <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-        </button>
+        <BookmarkButton
+          favoritesToggle={favoritesToggle}
+          status={favoriteStatus}
+          element='offer'
+        />
       </div>
       <div className="offer__rating rating">
         <div className="offer__stars rating__stars">

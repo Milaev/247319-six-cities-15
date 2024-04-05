@@ -1,6 +1,11 @@
-import {Link} from 'react-router-dom';
+import BookmarkButton from '../bookmark-button/bookmark-button';
+import {Link, useNavigate} from 'react-router-dom';
 import {OfferTypes} from '../../types/offer';
-import {capitalizeFirstLetter, convertToPercentage} from '../../const/const';
+import {AppRoute, AuthorizationStatus, capitalizeFirstLetter, convertToPercentage} from '../../const/const';
+import {useAppDispatch, useAppSelector} from '../../hooks/store';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {addFavorites} from '../../store/api-actions';
+import {useState} from 'react';
 
 type PlaceCardProps = {
   offer: OfferTypes;
@@ -12,6 +17,19 @@ type PlaceCardProps = {
 
 export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, classNameItem}: PlaceCardProps): JSX.Element {
   const {id, title, type, price, previewImage, rating, isPremium, isFavorite} = offer;
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const navigate = useNavigate();
+  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
+
+  const favoritesToggle = () => {
+    if (authStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    setFavoriteStatus(!favoriteStatus);
+    dispatch(addFavorites({ offerData: offer, id: offer.id, isFavorite: !favoriteStatus}));
+  };
 
   return (
     <article
@@ -40,23 +58,15 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button
-            className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
-            type="button"
-          >
-            <svg
-              className="place-card__bookmark-icon"
-              width={18}
-              height={19}
-            >
-              <use xlinkHref="#icon-bookmark" />
-            </svg>
-            <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-          </button>
+          <BookmarkButton
+            favoritesToggle={favoritesToggle}
+            status={favoriteStatus}
+            element='place-card'
+          />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: convertToPercentage(rating)}} />
+            <span style={{ width: convertToPercentage(rating) }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -67,6 +77,6 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
         </h2>
         <p className="place-card__type">{capitalizeFirstLetter(type)}</p>
       </div>
-    </article>
+    </article >
   );
 }

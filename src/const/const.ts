@@ -34,6 +34,7 @@ export enum NameSpace {
   AppData = 'APP_DATA',
   SelectedOfferData = 'SELECTED_OFFER_DATA',
   User = 'USER',
+  Favorites = 'FAVORITES',
 }
 
 function humanizeDateTime(date?: string): string {

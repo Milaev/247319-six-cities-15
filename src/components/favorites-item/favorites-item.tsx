@@ -1,13 +1,25 @@
-import {OfferTypes} from '../../types/offer';
+import BookmarkButton from '../bookmark-button/bookmark-button';
+import {useState} from 'react';
 import {Link} from 'react-router-dom';
+import {useAppDispatch} from '../../hooks/store';
+import {addFavorites} from '../../store/api-actions';
 import {convertToPercentage, capitalizeFirstLetter} from '../../const/const';
+import {OfferTypes} from '../../types/offer';
 
 type FavoritesItemProps = {
   favoriteOffer: OfferTypes;
 }
 
 export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.Element {
-  const {id, title, type, price, previewImage, rating, isPremium, isFavorite} = favoriteOffer;
+  const {id, title, type, price, previewImage, rating, isPremium} = favoriteOffer;
+
+  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(favoriteOffer.isFavorite);
+  const dispatch = useAppDispatch();
+
+  const favoritesToggle = () => {
+    setFavoriteStatus(!favoriteStatus);
+    dispatch(addFavorites({ offerData: favoriteOffer, id: favoriteOffer.id, isFavorite: !favoriteStatus}));
+  };
 
   return (
     <article className="favorites__card place-card">
@@ -34,19 +46,11 @@ export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.
               /&nbsp;night
             </span>
           </div>
-          <button
-            className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
-            type="button"
-          >
-            <svg
-              className="place-card__bookmark-icon"
-              width={18}
-              height={19}
-            >
-              <use xlinkHref="#icon-bookmark" />
-            </svg>
-            <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-          </button>
+          <BookmarkButton
+            favoritesToggle={favoritesToggle}
+            status={favoriteStatus}
+            element='place-card'
+          />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

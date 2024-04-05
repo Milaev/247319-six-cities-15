@@ -2,13 +2,10 @@ import FavoritesList from '../../components/favorites-list/favorites-list';
 import FavEmpty from '../../components/fav-empty/fav-empty';
 import {Helmet} from 'react-helmet-async';
 import {useAppSelector} from '../../hooks/store';
-import {getOffers} from '../../store/app-data/selectors';
+import { getFavorites } from '../../store/favorites-process/selectors';
 
 export default function FavoritesPage(): JSX.Element {
-  //тут потом всё равно из стейта надо будет избранные доставать
-  //пока временно, чтобы без ошибок было getOffers = результат изюранных 0 сейчас
-  const offers = useAppSelector(getOffers);
-  const favoritesOffers = offers.filter((offer) => offer.isFavorite);
+  const favoritesOffers = useAppSelector(getFavorites);
   const favoritesEmptyPage = favoritesOffers.length === 0;
   const pageTitle = favoritesEmptyPage ? 'There are no favorites places' : 'Favorites. 6 cities';
 

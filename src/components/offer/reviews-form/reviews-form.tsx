@@ -1,8 +1,9 @@
 import {useState, ChangeEvent, Fragment, FormEvent} from 'react';
-import {useAppDispatch} from '../../../hooks/store';
+import {useAppDispatch, useAppSelector} from '../../../hooks/store';
 import {useParams} from 'react-router-dom';
 import {sendReview} from '../../../store/api-actions';
 import {CommentTypes} from '../../../types/review';
+import {checkReviewsIsLoading} from '../../../store/selected-offer-data/selectors';
 
 const rating = [
   { value: 5, label: 'perfect' },
@@ -57,6 +58,8 @@ export default function ReviewsForm(): JSX.Element {
     resetForm();
   };
 
+  const reviewsIsLoading = useAppSelector(checkReviewsIsLoading);
+
   return (
     <form
       className="reviews__form form"
@@ -109,7 +112,7 @@ export default function ReviewsForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formData.textReview.length < 50 || formData.rating === 0}
+          disabled={formData.textReview.length < 50 || formData.rating === 0 || reviewsIsLoading}
         >
           Submit
         </button>
