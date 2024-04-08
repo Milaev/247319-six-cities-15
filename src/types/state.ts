@@ -31,6 +31,7 @@ export type SelectedOfferData = {
   reviews: ReviewTypes[];
   reviewsIsLoading: boolean;
   isOfferExist: boolean;
+  errorSendReview: boolean;
 }
 
 export type FavoritesProcess = {

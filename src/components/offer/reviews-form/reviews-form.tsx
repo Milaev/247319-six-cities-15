@@ -4,6 +4,7 @@ import {useParams} from 'react-router-dom';
 import {sendReview} from '../../../store/api-actions';
 import {CommentTypes} from '../../../types/review';
 import {checkReviewsIsLoading} from '../../../store/selected-offer-data/selectors';
+import {MAX_SYMBOLS_IN_REVIEW, MIN_SYMBOLS_IN_REVIEW} from '../../../const/const';
 
 const rating = [
   { value: 5, label: 'perfect' },
@@ -81,6 +82,7 @@ export default function ReviewsForm(): JSX.Element {
               type="radio"
               checked={formData.rating === value}
               onChange={handleRatingChange}
+              disabled={reviewsIsLoading}
             />
             <label
               htmlFor={`${value}-stars`}
@@ -101,6 +103,7 @@ export default function ReviewsForm(): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.textReview}
         onChange={handleTextReviewChange}
+        disabled={reviewsIsLoading}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -112,7 +115,7 @@ export default function ReviewsForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formData.textReview.length < 50 || formData.rating === 0 || reviewsIsLoading}
+          disabled={formData.textReview.length < MIN_SYMBOLS_IN_REVIEW || formData.textReview.length > MAX_SYMBOLS_IN_REVIEW || formData.rating === 0 || reviewsIsLoading}
         >
           Submit
         </button>

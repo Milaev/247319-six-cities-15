@@ -2,9 +2,10 @@ import Logo from '../logo/logo';
 import {Outlet, Link, useLocation} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const/const';
 import {useAppDispatch, useAppSelector} from '../../hooks/store';
-import {logoutAction} from '../../store/api-actions';
+import {fetchFavorites, logoutAction} from '../../store/api-actions';
 import {getAuthorizationStatus, getUserData} from '../../store/user-process/selectors';
 import {getFavorites} from '../../store/favorites-process/selectors';
+import { useEffect } from 'react';
 
 type LayoutConfig = {
   rootClassName: string;
@@ -46,11 +47,17 @@ export default function Layout() {
   const {pathname} = useLocation();
   const layoutConfig: LayoutConfig = LayoutConfigMap[pathname as AppRoute] || DEFAULT_LAYOUT_CONFIG;
   const {rootClassName, linkClassName, needRenderUserInfo, needRenderFooter} = layoutConfig;
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const authStatus = useAppSelector(getAuthorizationStatus);
   const favoritesOffers = useAppSelector(getFavorites);
   const favoritesEmptyPage = favoritesOffers.length === 0;
   const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if(authStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavorites());
+    }
+  }, [authStatus, dispatch]);
 
   const handleLogout = () => {
     dispatch(logoutAction());
@@ -85,7 +92,7 @@ export default function Layout() {
                         style={{backgroundImage: `url(${userData?.avatarUrl})`}}
                       >
                       </div>
-                      {authorizationStatus === AuthorizationStatus.Auth ? (
+                      {authStatus === AuthorizationStatus.Auth ? (
                         <>
                           <span className="header__user-name user__name">{userData?.email}</span>
                           <span className="header__favorite-count">{favoritesOffers.length}</span>
@@ -93,10 +100,10 @@ export default function Layout() {
                       ) : <span className="header__login">Sign in</span>}
                     </Link>
                   </li>
-                  {authorizationStatus === AuthorizationStatus.Auth ? (
+                  {authStatus === AuthorizationStatus.Auth ? (
                     <li className="header__nav-item">
                       <Link
-                        to='/'
+                        to={AppRoute.Login}
                         className="header__nav-link"
                         onClick={handleLogout}
                       >

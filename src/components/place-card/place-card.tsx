@@ -65,7 +65,10 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
           />
         </div>
         <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
+          <div
+            className="place-card__stars rating__stars"
+            style={{width: '72px'}}
+          >
             <span style={{ width: convertToPercentage(rating) }} />
             <span className="visually-hidden">Rating</span>
           </div>

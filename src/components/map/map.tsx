@@ -1,6 +1,6 @@
-import leaflet from 'leaflet';
-import useMap from './useMap';
 import 'leaflet/dist/leaflet.css';
+import useMap from './useMap';
+import leaflet, {LayerGroup} from 'leaflet';
 import {useRef, useEffect} from 'react';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const/const';
 import {CityTypes} from '../../types/city';
@@ -28,10 +28,13 @@ const currentCustomIcon = leaflet.icon({
 export default function Map({mapClassName, offers, city, selectedOffer}: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+  const markerLayer = useRef<LayerGroup>(leaflet.layerGroup());
 
   useEffect(() => {
     if (map) {
       map.setView([city.location.latitude, city.location.longitude], city.location.zoom);
+      markerLayer.current.addTo(map);
+      markerLayer.current.clearLayers();
     }
   }, [city, map]);
 
@@ -47,7 +50,7 @@ export default function Map({mapClassName, offers, city, selectedOffer}: MapProp
               ? currentCustomIcon
               : defaultCustomIcon,
           })
-          .addTo(map);
+          .addTo(markerLayer.current);
       });
     }
   }, [map, selectedOffer, offers, city]);

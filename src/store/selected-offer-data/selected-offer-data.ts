@@ -1,7 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {SelectedOfferData} from '../../types/state';
 import {NameSpace} from '../../const/const';
-import {fetchNearPlaces, fetchOffer, fetchReviews} from '../api-actions';
+import {fetchNearPlaces, fetchOffer, fetchReviews, sendReview} from '../api-actions';
 import {ReviewTypes} from '../../types/review';
 
 const initialState: SelectedOfferData = {
@@ -10,6 +10,7 @@ const initialState: SelectedOfferData = {
   nearPlaces: [],
   reviews: [],
   reviewsIsLoading: false,
+  errorSendReview: false,
 };
 
 export const selectedOfferData = createSlice({
@@ -34,8 +35,15 @@ export const selectedOfferData = createSlice({
       .addCase(fetchNearPlaces.fulfilled, (state, action) => {
         state.nearPlaces = action.payload;
       })
-      .addCase(fetchReviews.pending, (state) => {
+      .addCase(sendReview.pending, (state) => {
         state.reviewsIsLoading = true;
+      })
+      .addCase(sendReview.rejected, (state) => {
+        state.errorSendReview = true;
+      })
+      .addCase(sendReview.fulfilled, (state) => {
+        state.reviewsIsLoading = false;
+        state.errorSendReview = false;
       })
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.reviewsIsLoading = false;

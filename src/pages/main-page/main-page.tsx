@@ -82,7 +82,7 @@ export default function MainPage(): JSX.Element {
             <>
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{placesFound} places to stay in {currentLocation}</b>
+                <b className="places__found">{placesFound} {placesFound === 1 ? 'place' : 'places'} to stay in {currentLocation}</b>
                 <SortingForm
                   onSortingChange={handleSortingChange}
                 />

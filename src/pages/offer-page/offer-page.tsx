@@ -15,6 +15,7 @@ import {fetchOffer, fetchNearPlaces, fetchReviews} from '../../store/api-actions
 import {store} from '../../store';
 import {checkExistence, getNearPlaces, getSelectedOffer} from '../../store/selected-offer-data/selectors';
 import {OfferTypes} from '../../types/offer';
+import {MAX_IMAGES_PER_OFFER} from '../../const/const';
 
 export default function OfferPage(): JSX.Element {
   const params = useParams();
@@ -61,7 +62,7 @@ export default function OfferPage(): JSX.Element {
       <section className="offer">
         <div className="offer__gallery-container container">
           <div className="offer__gallery">
-            {images.map((item, index) => (
+            {images.slice(0, MAX_IMAGES_PER_OFFER).map((item, index) => (
               <Gallery src={item} alt={`Image ${index + 1}`} key={item} />
             ))}
           </div>
