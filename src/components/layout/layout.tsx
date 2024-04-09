@@ -6,6 +6,7 @@ import {fetchFavorites, logoutAction} from '../../store/api-actions';
 import {getAuthorizationStatus, getUserData} from '../../store/user-process/selectors';
 import {getFavorites} from '../../store/favorites-process/selectors';
 import { useEffect } from 'react';
+import { resetAuthStatus } from '../../store/user-process/user-process';
 
 type LayoutConfig = {
   rootClassName: string;
@@ -61,6 +62,7 @@ export default function Layout() {
 
   const handleLogout = () => {
     dispatch(logoutAction());
+    dispatch(resetAuthStatus());
   };
 
   return (
@@ -102,13 +104,13 @@ export default function Layout() {
                   </li>
                   {authStatus === AuthorizationStatus.Auth ? (
                     <li className="header__nav-item">
-                      <Link
-                        to={AppRoute.Login}
+                      <button
+                        style={{border: '0', backgroundColor: 'transparent'}}
                         className="header__nav-link"
                         onClick={handleLogout}
                       >
                         <span className="header__signout">Sign out</span>
-                      </Link>
+                      </button>
                     </li>
                   ) : null}
                 </ul>

@@ -7,12 +7,12 @@ import PrivateRoute from '../private-route/private-route';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import Layout from '../layout/layout';
 import LoadingScreen from '../loading-screen/loading-screen';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const/const';
-import {HelmetProvider} from 'react-helmet-async';
-import {useAppSelector} from '../../hooks/store';
-import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {checkOffersLoadingStatus, getErrorStatus} from '../../store/app-data/selectors';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const/const';
+import { HelmetProvider } from 'react-helmet-async';
+import { useAppSelector } from '../../hooks/store';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { checkOffersLoadingStatus, getErrorStatus } from '../../store/app-data/selectors';
 import ErrorScreen from '../error-screen/error-screen';
 
 export default function App(): JSX.Element {
@@ -51,11 +51,7 @@ export default function App(): JSX.Element {
             />
             <Route
               path={AppRoute.Login}
-              element={
-                <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
-                  <LoginPage />
-                </PrivateRoute>
-              }
+              element={<LoginPage />}
             />
             <Route
               path={AppRoute.Favorites}

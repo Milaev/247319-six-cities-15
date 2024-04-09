@@ -2,7 +2,7 @@ import FavoritesList from '../../components/favorites-list/favorites-list';
 import FavEmpty from '../../components/fav-empty/fav-empty';
 import {Helmet} from 'react-helmet-async';
 import {useAppSelector} from '../../hooks/store';
-import { getFavorites } from '../../store/favorites-process/selectors';
+import {getFavorites} from '../../store/favorites-process/selectors';
 
 export default function FavoritesPage(): JSX.Element {
   const favoritesOffers = useAppSelector(getFavorites);

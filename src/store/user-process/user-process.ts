@@ -22,6 +22,9 @@ export const userProcess = createSlice({
     },
     removeUserData: (state) => {
       state.userData = null;
+    },
+    resetAuthStatus: (state) => {
+      state.authorizationStatus = AuthorizationStatus.Unknown;
     }
   },
   extraReducers(builder) {
@@ -44,4 +47,4 @@ export const userProcess = createSlice({
   }
 });
 
-export const {addUserData, removeUserData, setError} = userProcess.actions;
+export const {addUserData, removeUserData, setError, resetAuthStatus} = userProcess.actions;

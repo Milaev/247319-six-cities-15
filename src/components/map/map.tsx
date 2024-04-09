@@ -36,7 +36,7 @@ export default function Map({mapClassName, offers, city, selectedOffer}: MapProp
       markerLayer.current.addTo(map);
       markerLayer.current.clearLayers();
     }
-  }, [city, map]);
+  }, [city, map, selectedOffer, offers]);
 
   useEffect(() => {
     if (map) {

@@ -55,8 +55,11 @@ export default function ReviewsForm(): JSX.Element {
       comment: formData.textReview,
       rating: Number(formData.rating),
     };
-    dispatch(sendReview({ reviewData, offerId }));
-    resetForm();
+    dispatch(sendReview({ reviewData, offerId })).then(({ payload }) => {
+      if (payload) {
+        resetForm();
+      }
+    });
   };
 
   const reviewsIsLoading = useAppSelector(checkReviewsIsLoading);
