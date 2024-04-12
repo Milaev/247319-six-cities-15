@@ -15,7 +15,7 @@ import {fetchOffer, fetchNearPlaces, fetchReviews} from '../../store/api-actions
 import {store} from '../../store';
 import {checkExistence, getNearPlaces, getSelectedOffer} from '../../store/selected-offer-data/selectors';
 import {OfferTypes} from '../../types/offer';
-import {MAX_IMAGES_PER_OFFER} from '../../const/const';
+import {MAX_IMAGES_PER_OFFER, NEAR_PLACES_FOR_SHOW} from '../../const/const';
 
 export default function OfferPage(): JSX.Element {
   const params = useParams();
@@ -28,7 +28,7 @@ export default function OfferPage(): JSX.Element {
   }, [offerId]);
 
   const selectedOffer = useAppSelector(getSelectedOffer);
-  const nearPlaces = useAppSelector(getNearPlaces).slice(0, 3);
+  const nearPlaces = useAppSelector(getNearPlaces).slice(0, NEAR_PLACES_FOR_SHOW);
   const isOfferNotExist = useAppSelector(checkExistence);
   const placesForMap: OfferTypes[] = selectedOffer ? [...nearPlaces, selectedOffer] : [];
 

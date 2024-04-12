@@ -19,7 +19,7 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
   const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
   const dispatch = useAppDispatch();
 
-  const favoritesToggle = () => {
+  const toggleFavorites = () => {
     if (authStatus !== AuthorizationStatus.Auth) {
       navigate(AppRoute.Login);
       return;
@@ -39,7 +39,7 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
           {title}
         </h1>
         <BookmarkButton
-          favoritesToggle={favoritesToggle}
+          onToggleFavorites={toggleFavorites}
           status={favoriteStatus}
           element='offer'
         />

@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import {sendReview} from '../../../store/api-actions';
 import {CommentTypes} from '../../../types/review';
 import {checkReviewsIsLoading} from '../../../store/selected-offer-data/selectors';
-import {MAX_SYMBOLS_IN_REVIEW, MIN_SYMBOLS_IN_REVIEW} from '../../../const/const';
+import { SYMBOLS_IN_REVIEW } from '../../../const/const';
 
 const rating = [
   { value: 5, label: 'perfect' },
@@ -118,7 +118,7 @@ export default function ReviewsForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formData.textReview.length < MIN_SYMBOLS_IN_REVIEW || formData.textReview.length > MAX_SYMBOLS_IN_REVIEW || formData.rating === 0 || reviewsIsLoading}
+          disabled={formData.textReview.length < SYMBOLS_IN_REVIEW.MIN || formData.textReview.length > SYMBOLS_IN_REVIEW.MAX || formData.rating === 0 || reviewsIsLoading}
         >
           Submit
         </button>

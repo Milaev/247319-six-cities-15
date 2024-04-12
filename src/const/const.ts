@@ -9,9 +9,13 @@ const DATE_FORMAT_IN_REVIEW_TEXT = 'MMMM YYYY';
 const PLACE_RATING_RATIO = 20;
 export const TIMEOUT_SHOW_ERROR = 2000;
 export const MAX_IMAGES_PER_OFFER = 6;
-export const MIN_SYMBOLS_IN_REVIEW = 50;
-export const MAX_SYMBOLS_IN_REVIEW = 300;
 export const MAX_COMMENTS_PER_OFFER = 10;
+export const NEAR_PLACES_FOR_SHOW = 3;
+
+export const SYMBOLS_IN_REVIEW = {
+  MIN: 50,
+  MAX: 300,
+};
 
 export enum AppRoute {
   Root = '/',

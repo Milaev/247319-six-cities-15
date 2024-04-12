@@ -16,7 +16,7 @@ export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.
   const [favoriteStatus, setFavoriteStatus] = useState<boolean>(favoriteOffer.isFavorite);
   const dispatch = useAppDispatch();
 
-  const favoritesToggle = () => {
+  const toggleFavorites = () => {
     setFavoriteStatus(!favoriteStatus);
     dispatch(addFavorites({ offerData: favoriteOffer, id: favoriteOffer.id, isFavorite: !favoriteStatus}));
   };
@@ -47,7 +47,7 @@ export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.
             </span>
           </div>
           <BookmarkButton
-            favoritesToggle={favoritesToggle}
+            onToggleFavorites={toggleFavorites}
             status={favoriteStatus}
             element='place-card'
           />

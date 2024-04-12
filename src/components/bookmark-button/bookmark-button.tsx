@@ -4,17 +4,17 @@ import {checkFavoritesIsLoading} from '../../store/favorites-process/selectors';
 type BookmarkButtonProps = {
   status: boolean;
   element: string;
-  favoritesToggle: () => void;
+  onToggleFavorites: () => void;
 }
 
-export default function BookmarkButton({status, element, favoritesToggle}: BookmarkButtonProps): JSX.Element {
+export default function BookmarkButton({status, element, onToggleFavorites}: BookmarkButtonProps): JSX.Element {
   const isLoading = useAppSelector(checkFavoritesIsLoading);
 
   const isActive = status ? `${element}__bookmark-button button ${element}__bookmark-button--active` : `${element}__bookmark-button button`;
 
   return (
     <button
-      onClick={favoritesToggle}
+      onClick={onToggleFavorites}
       className={isActive}
       type="button"
       disabled={isLoading}

@@ -1,10 +1,10 @@
 import Logo from '../logo/logo';
-import {Outlet, Link, useLocation} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const/const';
-import {useAppDispatch, useAppSelector} from '../../hooks/store';
-import {fetchFavorites, logoutAction} from '../../store/api-actions';
-import {getAuthorizationStatus, getUserData} from '../../store/user-process/selectors';
-import {getFavorites} from '../../store/favorites-process/selectors';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const/const';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { fetchFavorites, logoutAction } from '../../store/api-actions';
+import { getAuthorizationStatus, getUserData } from '../../store/user-process/selectors';
+import { getFavorites } from '../../store/favorites-process/selectors';
 import { useEffect } from 'react';
 import { resetAuthStatus } from '../../store/user-process/user-process';
 
@@ -45,9 +45,9 @@ const LayoutConfigMap: Record<AppRoute, LayoutConfig> = {
 };
 
 export default function Layout() {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const layoutConfig: LayoutConfig = LayoutConfigMap[pathname as AppRoute] || DEFAULT_LAYOUT_CONFIG;
-  const {rootClassName, linkClassName, needRenderUserInfo, needRenderFooter} = layoutConfig;
+  const { rootClassName, linkClassName, needRenderUserInfo, needRenderFooter } = layoutConfig;
   const authStatus = useAppSelector(getAuthorizationStatus);
   const favoritesOffers = useAppSelector(getFavorites);
   const favoritesEmptyPage = favoritesOffers.length === 0;
@@ -55,7 +55,7 @@ export default function Layout() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(authStatus === AuthorizationStatus.Auth) {
+    if (authStatus === AuthorizationStatus.Auth) {
       dispatch(fetchFavorites());
     }
   }, [authStatus, dispatch]);
@@ -89,23 +89,28 @@ export default function Layout() {
                       to={AppRoute.Favorites}
                       className="header__nav-link header__nav-link--profile"
                     >
-                      <div
-                        className="header__avatar-wrapper user__avatar-wrapper"
-                        style={{backgroundImage: `url(${userData?.avatarUrl})`}}
-                      >
-                      </div>
                       {authStatus === AuthorizationStatus.Auth ? (
                         <>
+                          <div
+                            className="header__avatar-wrapper user__avatar-wrapper"
+                            style={{backgroundImage: `url(${userData?.avatarUrl})`}}
+                          >
+                          </div>
                           <span className="header__user-name user__name">{userData?.email}</span>
                           <span className="header__favorite-count">{favoritesOffers.length}</span>
                         </>
-                      ) : <span className="header__login">Sign in</span>}
+                      ) : (
+                        <>
+                          <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                          <span className="header__login">Sign in</span>
+                        </>
+                      )}
                     </Link>
                   </li>
                   {authStatus === AuthorizationStatus.Auth ? (
                     <li className="header__nav-item">
                       <button
-                        style={{border: '0', backgroundColor: 'transparent'}}
+                        style={{ border: '0', backgroundColor: 'transparent' }}
                         className="header__nav-link"
                         onClick={handleLogout}
                       >

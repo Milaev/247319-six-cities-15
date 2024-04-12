@@ -25,12 +25,12 @@ export default function SortingForm({onSortingChange}: SortingFormProps): JSX.El
     setIsOpen(false);
   };
 
-  const optionsToggle = () => {
+  const handleOptions = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <form className="places__sorting" action="#" method="get" onClick={optionsToggle}>
+    <form className="places__sorting" action="#" method="get" onClick={handleOptions}>
       <span className="places__sorting-caption">Sort by </span>
       <span className="places__sorting-type" tabIndex={0}>
         {sortingOptions[activeSorting]}

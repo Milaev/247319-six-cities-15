@@ -22,7 +22,7 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
   const navigate = useNavigate();
   const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
 
-  const favoritesToggle = () => {
+  const toggleFavorites = () => {
     if (authStatus !== AuthorizationStatus.Auth) {
       navigate(AppRoute.Login);
       return;
@@ -59,7 +59,7 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
           <BookmarkButton
-            favoritesToggle={favoritesToggle}
+            onToggleFavorites={toggleFavorites}
             status={favoriteStatus}
             element='place-card'
           />
