@@ -4,3 +4,4 @@ import { State } from '../../types/state';
 
 export const getFavorites = (state: State): OfferTypes[] => state[NameSpace.Favorites].favorites;
 export const checkFavoritesIsLoading = (state: State): boolean => state[NameSpace.Favorites].addFavoriteIsLoading;
+export const getAddFavoritesErrorStatus = (state: State): boolean => state[NameSpace.Favorites].hasFavoriteError;

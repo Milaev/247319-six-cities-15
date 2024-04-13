@@ -34,13 +34,9 @@ export default function OfferPage(): JSX.Element {
 
   const [activePlaceCard, setActivePlaceCard] = useState<string | null>(offerId);
 
-  const handleMouseOver = (hoveredOfferId: string) => {
-    setActivePlaceCard(hoveredOfferId);
-  };
-
-  const handleMouseOut = () => {
+  useEffect(() => {
     setActivePlaceCard(offerId);
-  };
+  }, [offerId]);
 
   if (isOfferNotExist) {
     return <NotFoundPage />;
@@ -103,8 +99,6 @@ export default function OfferPage(): JSX.Element {
             classNameList={'near-places__list'}
             classNameItem={'near-places__card'}
             offers={nearPlaces}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
             activePlaceCard={activePlaceCard}
           />
         </section>

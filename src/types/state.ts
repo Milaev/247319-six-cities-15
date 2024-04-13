@@ -39,5 +39,5 @@ export type FavoritesProcess = {
   favoritesIsLoading: boolean;
   favoritesPageError: boolean;
   addFavoriteIsLoading: boolean;
-  addFavoriteError: boolean;
+  hasFavoriteError: boolean;
 }

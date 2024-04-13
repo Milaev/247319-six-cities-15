@@ -3,8 +3,8 @@ import {OfferTypes} from '../../types/offer';
 
 type PlaceCardListProps = {
   offers: OfferTypes[];
-  onMouseOver: (offerId: string) => void;
-  onMouseOut: () => void;
+  onMouseOver?: (offerId: string) => void;
+  onMouseOut?: () => void;
   activePlaceCard: string | null;
   classNameList: string;
   classNameItem: string;
@@ -18,7 +18,7 @@ export default function PlaceCardList({offers, onMouseOver, onMouseOut, activePl
           classNameItem={classNameItem}
           key={offer.id}
           offer={offer}
-          onMouseOver={() => onMouseOver(offer.id)}
+          onMouseOver={onMouseOver ? () => onMouseOver(offer.id) : undefined}
           onMouseOut={onMouseOut}
           isActive={activePlaceCard === offer.id}
         />

@@ -1,11 +1,13 @@
 import BookmarkButton from '../bookmark-button/bookmark-button';
 import {Link, useNavigate} from 'react-router-dom';
 import {OfferTypes} from '../../types/offer';
-import {AppRoute, AuthorizationStatus, capitalizeFirstLetter, convertToPercentage} from '../../const/const';
+import {AppRoute, AuthorizationStatus, ERROR_ADD_FAVORITES, capitalizeFirstLetter, convertToPercentage} from '../../const/const';
 import {useAppDispatch, useAppSelector} from '../../hooks/store';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {addFavorites} from '../../store/api-actions';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import { getAddFavoritesErrorStatus, getFavorites } from '../../store/favorites-process/selectors';
+import { processErrorHandle } from '../../services/process-error-handle';
 
 type PlaceCardProps = {
   offer: OfferTypes;
@@ -16,11 +18,18 @@ type PlaceCardProps = {
 }
 
 export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, classNameItem}: PlaceCardProps): JSX.Element {
-  const {id, title, type, price, previewImage, rating, isPremium, isFavorite} = offer;
+  const {id, title, type, price, previewImage, rating, isPremium} = offer;
   const dispatch = useAppDispatch();
   const authStatus = useAppSelector(getAuthorizationStatus);
   const navigate = useNavigate();
-  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
+  const favorites = useAppSelector(getFavorites);
+  const isOfferInFavorites = favorites.some((fav) => fav.id === offer.id);
+  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isOfferInFavorites);
+  const errorStatus = useAppSelector(getAddFavoritesErrorStatus);
+
+  useEffect(() => {
+    setFavoriteStatus(isOfferInFavorites);
+  }, [isOfferInFavorites, offer.id]);
 
   const toggleFavorites = () => {
     if (authStatus !== AuthorizationStatus.Auth) {
@@ -29,6 +38,10 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
     }
     setFavoriteStatus(!favoriteStatus);
     dispatch(addFavorites({ offerData: offer, id: offer.id, isFavorite: !favoriteStatus}));
+
+    if (errorStatus) {
+      processErrorHandle(ERROR_ADD_FAVORITES);
+    }
   };
 
   return (

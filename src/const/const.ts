@@ -11,6 +11,7 @@ export const TIMEOUT_SHOW_ERROR = 2000;
 export const MAX_IMAGES_PER_OFFER = 6;
 export const MAX_COMMENTS_PER_OFFER = 10;
 export const NEAR_PLACES_FOR_SHOW = 3;
+export const ERROR_ADD_FAVORITES = 'Ошибка обновления данных на сервере, попробуйте ещё позже';
 
 export const SYMBOLS_IN_REVIEW = {
   MIN: 50,

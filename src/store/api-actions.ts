@@ -124,7 +124,7 @@ export const sendReview = createAsyncThunk<boolean, { reviewData: CommentTypes; 
       const { data } = await api.post<ReviewTypes>(`${APIRoute.Comments}/${offerId}`, reviewData);
       dispatch(addReview(data));
       return true;
-    } catch(err) {
+    } catch (err) {
       return false;
     }
   },
@@ -156,5 +156,6 @@ export const addFavorites = createAsyncThunk<OfferTypes, {
       const status = Number(isFavorite);
       const { data } = await api.post<OfferTypes>(`${APIRoute.Favorite}/${id}/${status}`, offerData);
       return data;
+
     },
   );

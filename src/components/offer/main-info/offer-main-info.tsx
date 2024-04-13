@@ -3,21 +3,28 @@ import {convertToPercentage, capitalizeFirstLetter} from '../../../const/const';
 import {useAppSelector, useAppDispatch} from '../../../hooks/store';
 import {getAuthorizationStatus} from '../../../store/user-process/selectors';
 import {useNavigate} from 'react-router-dom';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {AuthorizationStatus, AppRoute} from '../../../const/const';
 import {addFavorites} from '../../../store/api-actions';
 import {OfferTypes} from '../../../types/offer';
+import { getFavorites } from '../../../store/favorites-process/selectors';
 
 type OfferMainInfoProps = {
   selectedOffer: OfferTypes;
 }
 
 export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.Element {
-  const {isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price} = selectedOffer;
+  const {isPremium, title, rating, type, bedrooms, maxAdults, price} = selectedOffer;
   const authStatus = useAppSelector(getAuthorizationStatus);
   const navigate = useNavigate();
-  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isFavorite);
+  const favorites = useAppSelector(getFavorites);
+  const isOfferInFavorites = favorites.some((fav) => fav.id === selectedOffer.id);
+  const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isOfferInFavorites);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setFavoriteStatus(isOfferInFavorites);
+  }, [isOfferInFavorites, selectedOffer.id]);
 
   const toggleFavorites = () => {
     if (authStatus !== AuthorizationStatus.Auth) {
@@ -56,10 +63,10 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
           {capitalizeFirstLetter(type)}
         </li>
         <li className="offer__feature offer__feature--bedrooms">
-          {bedrooms} Bedrooms
+          {bedrooms} {bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}
         </li>
         <li className="offer__feature offer__feature--adults">
-          Max {maxAdults} adults
+          Max {maxAdults} {maxAdults === 1 ? 'adult' : 'adults'}
         </li>
       </ul>
       <div className="offer__price">

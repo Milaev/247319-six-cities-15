@@ -9,7 +9,7 @@ const initialState: FavoritesProcess = {
   favoritesIsLoading: false,
   favoritesPageError: false,
   addFavoriteIsLoading: false,
-  addFavoriteError: false,
+  hasFavoriteError: false,
 };
 
 export const favoritesProcess = createSlice({
@@ -38,10 +38,11 @@ export const favoritesProcess = createSlice({
       })
       .addCase(addFavorites.rejected, (state) => {
         state.addFavoriteIsLoading = false;
-        state.addFavoriteError = true;
+        state.hasFavoriteError = true;
       })
       .addCase(addFavorites.fulfilled, (state, action: PayloadAction<OfferTypes>) => {
         state.addFavoriteIsLoading = false;
+        state.hasFavoriteError = false;
         if (action.payload.isFavorite) {
           state.favorites.push(action.payload);
         } else {
