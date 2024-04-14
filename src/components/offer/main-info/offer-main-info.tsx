@@ -4,10 +4,11 @@ import {useAppSelector, useAppDispatch} from '../../../hooks/store';
 import {getAuthorizationStatus} from '../../../store/user-process/selectors';
 import {useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import {AuthorizationStatus, AppRoute} from '../../../const/const';
+import {AuthorizationStatus, AppRoute, ERROR_ADD_FAVORITES} from '../../../const/const';
 import {addFavorites} from '../../../store/api-actions';
 import {OfferTypes} from '../../../types/offer';
-import { getFavorites } from '../../../store/favorites-process/selectors';
+import { getFavorites, getAddFavoritesErrorStatus } from '../../../store/favorites-process/selectors';
+import { processErrorHandle } from '../../../services/process-error-handle';
 
 type OfferMainInfoProps = {
   selectedOffer: OfferTypes;
@@ -21,6 +22,7 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
   const isOfferInFavorites = favorites.some((fav) => fav.id === selectedOffer.id);
   const [favoriteStatus, setFavoriteStatus] = useState<boolean>(isOfferInFavorites);
   const dispatch = useAppDispatch();
+  const errorStatus = useAppSelector(getAddFavoritesErrorStatus);
 
   useEffect(() => {
     setFavoriteStatus(isOfferInFavorites);
@@ -34,6 +36,12 @@ export default function OfferMainInfo({selectedOffer}: OfferMainInfoProps): JSX.
     setFavoriteStatus(!favoriteStatus);
     dispatch(addFavorites({ offerData: selectedOffer, id: selectedOffer.id, isFavorite: !favoriteStatus}));
   };
+
+  useEffect(() => {
+    if (errorStatus) {
+      processErrorHandle(ERROR_ADD_FAVORITES);
+    }
+  },[errorStatus, favoriteStatus]);
 
   return (
     <>

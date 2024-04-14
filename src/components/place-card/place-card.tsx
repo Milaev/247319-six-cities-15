@@ -38,11 +38,13 @@ export default function PlaceCard({offer, onMouseOver, onMouseOut, isActive, cla
     }
     setFavoriteStatus(!favoriteStatus);
     dispatch(addFavorites({ offerData: offer, id: offer.id, isFavorite: !favoriteStatus}));
+  };
 
+  useEffect(() => {
     if (errorStatus) {
       processErrorHandle(ERROR_ADD_FAVORITES);
     }
-  };
+  },[errorStatus, favoriteStatus]);
 
   return (
     <article

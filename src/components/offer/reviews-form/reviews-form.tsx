@@ -3,8 +3,9 @@ import {useAppDispatch, useAppSelector} from '../../../hooks/store';
 import {useParams} from 'react-router-dom';
 import {sendReview} from '../../../store/api-actions';
 import {CommentTypes} from '../../../types/review';
-import {checkReviewsIsLoading} from '../../../store/selected-offer-data/selectors';
-import { SYMBOLS_IN_REVIEW } from '../../../const/const';
+import { checkReviewsIsLoading} from '../../../store/selected-offer-data/selectors';
+import { ERROR_SEND_REVIEW, SYMBOLS_IN_REVIEW } from '../../../const/const';
+import { processErrorHandle } from '../../../services/process-error-handle';
 
 const rating = [
   { value: 5, label: 'perfect' },
@@ -58,6 +59,8 @@ export default function ReviewsForm(): JSX.Element {
     dispatch(sendReview({ reviewData, offerId })).then(({ payload }) => {
       if (payload) {
         resetForm();
+      } else {
+        processErrorHandle(ERROR_SEND_REVIEW);
       }
     });
   };

@@ -81,8 +81,12 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, { dispatch, extra: api }) => {
-    const { data: { name, email, avatarUrl, isPro } } = await api.get<UserData>(APIRoute.Login);
-    dispatch(addUserData({ name, email, avatarUrl, isPro }));
+    try {
+      const { data: { name, email, avatarUrl, isPro } } = await api.get<UserData>(APIRoute.Login);
+      dispatch(addUserData({ name, email, avatarUrl, isPro }));
+    } catch (error) {
+      throw new Error();
+    }
   }
 );
 
@@ -124,7 +128,7 @@ export const sendReview = createAsyncThunk<boolean, { reviewData: CommentTypes; 
       const { data } = await api.post<ReviewTypes>(`${APIRoute.Comments}/${offerId}`, reviewData);
       dispatch(addReview(data));
       return true;
-    } catch (err) {
+    } catch (error) {
       return false;
     }
   },
@@ -156,6 +160,5 @@ export const addFavorites = createAsyncThunk<OfferTypes, {
       const status = Number(isFavorite);
       const { data } = await api.post<OfferTypes>(`${APIRoute.Favorite}/${id}/${status}`, offerData);
       return data;
-
     },
   );

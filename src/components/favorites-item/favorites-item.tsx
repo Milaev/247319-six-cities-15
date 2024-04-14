@@ -1,10 +1,12 @@
 import BookmarkButton from '../bookmark-button/bookmark-button';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useAppDispatch} from '../../hooks/store';
+import {useAppDispatch, useAppSelector} from '../../hooks/store';
 import {addFavorites} from '../../store/api-actions';
-import {convertToPercentage, capitalizeFirstLetter} from '../../const/const';
+import {convertToPercentage, capitalizeFirstLetter, ERROR_ADD_FAVORITES} from '../../const/const';
 import {OfferTypes} from '../../types/offer';
+import { processErrorHandle } from '../../services/process-error-handle';
+import { getAddFavoritesErrorStatus } from '../../store/favorites-process/selectors';
 
 type FavoritesItemProps = {
   favoriteOffer: OfferTypes;
@@ -15,11 +17,18 @@ export default function FavoritesItem({favoriteOffer}: FavoritesItemProps): JSX.
 
   const [favoriteStatus, setFavoriteStatus] = useState<boolean>(favoriteOffer.isFavorite);
   const dispatch = useAppDispatch();
+  const errorStatus = useAppSelector(getAddFavoritesErrorStatus);
 
   const toggleFavorites = () => {
     setFavoriteStatus(!favoriteStatus);
     dispatch(addFavorites({ offerData: favoriteOffer, id: favoriteOffer.id, isFavorite: !favoriteStatus}));
   };
+
+  useEffect(() => {
+    if (errorStatus) {
+      processErrorHandle(ERROR_ADD_FAVORITES);
+    }
+  },[errorStatus, favoriteStatus]);
 
   return (
     <article className="favorites__card place-card">

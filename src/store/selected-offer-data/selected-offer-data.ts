@@ -39,6 +39,7 @@ export const selectedOfferData = createSlice({
         state.reviewsIsLoading = true;
       })
       .addCase(sendReview.rejected, (state) => {
+        state.reviewsIsLoading = false;
         state.errorSendReview = true;
       })
       .addCase(sendReview.fulfilled, (state) => {
